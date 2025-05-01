@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAYA RIDES</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+            color: #3f3f3f;
+        }
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .vehicle-card {
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+        }
+        .vehicle-card.selected {
+            background-color: #e9f7fe;
+            border: 2px solid #007bff;
+        }
+        .vehicle-img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        .price-tag {
+            background-color: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+        }
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        /* Ola-like styling */
+        .booking-card {
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            margin-top: -50px;
+            background-color: white;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .ride-type-selector {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        
+        .ride-type {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #777;
+        }
+        
+        .ride-type.active {
+            border-bottom: 3px solid #44b700;
+            color: #44b700;
+        }
+        
+        .vehicle-card {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .vehicle-card.selected {
+            border: 2px solid #44b700;
+            background-color: #f8fff8;
+        }
+        
+        .vehicle-img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+        
+        .vehicle-details {
+            flex: 1;
+        }
+        
+        .vehicle-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .vehicle-info {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .price-tag {
+            background-color: #44b700;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .btn-request {
+            background-color: #44b700;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .btn-request:hover {
+            background-color: #3a9900;
+            transform: translateY(-2px);
+        }
+        
+        .location-input {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .location-input i {
+            position: absolute;
+            top: 12px;
+            left: 10px;
+            color: #44b700;
+        }
+        
+        .location-input input {
+            padding-left: 35px;
+            height: 45px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        
+        .location-input input:focus {
+            border-color: #44b700;
+            box-shadow: 0 0 0 0.2rem rgba(68, 183, 0, 0.25);
+        }
+        
+        .location-swap {
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            background: #44b700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            z-index: 5;
+        }
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+        .btn-request {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn-request:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        .location-input {
+            position: relative;
+        }
+        .location-input i {
+            position: absolute;
+            top: 40px;
+            left: 10px;
+            color: #007bff;
+        }
+        .location-input input {
+            padding-left: 30px;
+        }
+        .price-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            display: none;
+        }
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        .schedule-table {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .schedule-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .route-card {
+            margin-bottom: 20px;
+        }
+        .route-card .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .testimonial {
+            font-style: italic;
+            padding: 20px;
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+            margin-bottom: 20px;
+        }
+        .bus-stop-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .bus-stop-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .bus-stop-list li:last-child {
+            border-bottom: none;
+        }
+        .bus-stop-list i {
+            color: #007bff;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#"><i class="fas fa-bus"></i> YAYA TRANSPORT</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#services">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#routes">Routes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#schedule">Schedule</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About Us</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#loginModal"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="modal" data-target="#registerModal"><i class="fas fa-user-plus"></i> Register</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1>Your Reliable Public Transport Partner</h1>
+            <p class="lead">Safe, affordable and convenient transportation across the city</p>
+            <a href="#book" class="btn btn-primary btn-lg">
+                <i class="fas fa-ticket-alt"></i> Book Now
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4><i class="fas fa-route"></i> Popular Routes</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card route-card">
+                                    <div class="card-header">
+                                        <h5>Route 101: City Center - Airport</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="bus-stop-list">
+                                            <li><i class="fas fa-map-marker-alt"></i> City Center Terminal</li>
+                                            <li><i class="fas fa-map-marker"></i> Central Market</li>
+                                            <li><i class="fas fa-map-marker"></i> Business District</li>
+                                            <li><i class="fas fa-map-marker"></i> Highway Junction</li>
+                                            <li><i class="fas fa-map-marker-alt"></i> Airport Terminal</li>
+                                        </ul>
+                                        <p class="mt-3"><strong>Frequency:</strong> Every 15 minutes</p>
+                                        <p><strong>Fare:</strong> ₹25</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card route-card">
+                                    <div class="card-header">
+                                        <h5>Route 205: North Campus - South Mall</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="bus-stop-list">
+                                            <li><i class="fas fa-map-marker-alt"></i> North Campus</li>
+                                            <li><i class="fas fa-map-marker"></i> City Hospital</li>
+                                            <li><i class="fas fa-map-marker"></i> Central Park</li>
+                                            <li><i class="fas fa-map-marker"></i> Metro Station</li>
+                                            <li><i class="fas fa-map-marker-alt"></i> South Mall</li>
+                                        </ul>
+                                        <p class="mt-3"><strong>Frequency:</strong> Every 20 minutes</p>
+                                        <p><strong>Fare:</strong> ₹20</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4" id="schedule">
+                    <div class="card-header bg-primary text-white">
+                        <h4><i class="fas fa-clock"></i> Today's Departures</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Route</th>
+                                    <th>Departure</th>
+                                    <th>Arrival</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Delhi - Mumbai Express</td>
+                                    <td>08:00 PM</td>
+                                    <td>02:00 PM (Next Day)</td>
+                                    <td><span class="badge badge-success">On Time</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Bangalore - Chennai Traveller</td>
+                                    <td>10:30 PM</td>
+                                    <td>04:30 AM</td>
+                                    <td><span class="badge badge-warning">Delayed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Hyderabad - Vijayawada</td>
+                                    <td>09:00 PM</td>
+                                    <td>03:00 AM</td>
+                                    <td><span class="badge badge-success">On Time</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Kolkata - Siliguri</td>
+                                    <td>08:45 PM</td>
+                                    <td>06:45 AM</td>
+                                    <td><span class="badge badge-success">On Time</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4" id="book">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4><i class="fas fa-ticket-alt"></i> Book Your Ride</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="ride-form">
+                            <div class="position-relative">
+                                <div class="location-input">
+                                    <i class="fas fa-circle text-success"></i>
+                                    <input type="text" class="form-control" id="pickup" placeholder="Enter pickup location">
+                                </div>
+                                <div class="location-input">
+                                    <i class="fas fa-map-marker-alt text-danger"></i>
+                                    <input type="text" class="form-control" id="dropoff" placeholder="Enter destination">
+                                </div>
+                                <div class="location-swap">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group mt-4">
+                                <label class="font-weight-bold">Select Ride</label>
+                                <div id="vehicle-selection">
+                                    <div class="vehicle-card selected" data-value="Mini" data-rate="12">
+                                        <img src="https://www.pngall.com/wp-content/uploads/5/Sedan-Car-PNG-Image.png" class="vehicle-img" alt="Mini">
+                                        <div class="vehicle-details">
+                                            <div class="vehicle-name">Mini</div>
+                                            <div class="vehicle-info">Compact cars | 3 seats</div>
+                                        </div>
+                                        <div class="price-tag">₹12/km</div>
+                                    </div>
+                                    
+                                    <div class="vehicle-card" data-value="Sedan" data-rate="15">
+                                        <img src="https://www.pngall.com/wp-content/uploads/5/Sedan-Car-PNG-Image.png" class="vehicle-img" alt="Sedan">
+                                        <div class="vehicle-details">
+                                            <div class="vehicle-name">Sedan</div>
+                                            <div class="vehicle-info">Comfortable cars | 4 seats</div>
+                                        </div>
+                                        <div class="price-tag">₹15/km</div>
+                                    </div>
+                                    
+                                    <div class="vehicle-card" data-value="Prime SUV" data-rate="22">
+                                        <img src="https://www.pngall.com/wp-content/uploads/5/Black-SUV-PNG-Image.png" class="vehicle-img" alt="Prime SUV">
+                                        <div class="vehicle-details">
+                                            <div class="vehicle-name">Prime SUV</div>
+                                            <div class="vehicle-info">Premium SUVs | 6 seats</div>
+                                        </div>
+                                        <div class="price-tag">₹22/km</div>
+                                    </div>
+                                    
+                                    <div class="vehicle-card" data-value="Auto" data-rate="8">
+                                        <img src="https://www.pngall.com/wp-content/uploads/2016/04/Rickshaw-Free-Download-PNG.png" class="vehicle-img" alt="Auto">
+                                        <div class="vehicle-details">
+                                            <div class="vehicle-name">Auto</div>
+                                            <div class="vehicle-info">3-wheeler | 3 seats</div>
+                                        </div>
+                                        <div class="price-tag">₹8/km</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="when" class="font-weight-bold">When</label>
+                                <select class="form-control" id="when" onchange="toggleScheduleOptions()">
+                                    <option value="now">Now</option>
+                                    <option value="later">Schedule for later</option>
+                                </select>
+                            </div>
+                            
+                            <div id="schedule-options" style="display: none;">
+                                <div class="form-group">
+                                    <label for="schedule-date" class="font-weight-bold">Date</label>
+                                    <input type="date" class="form-control" id="schedule-date">
+                                </div>
+                                <div class="form-group">
+                                    <label for="schedule-time" class="font-weight-bold">Time</label>
+                                    <input type="time" class="form-control" id="schedule-time">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" id="payment-method">
+                                <label class="font-weight-bold">Payment Method</label>
+                                <div class="d-flex align-items-center">
+                                    <div class="custom-control custom-radio mr-4">
+                                        <input type="radio" id="cash" name="payment" class="custom-control-input" checked>
+                                        <label class="custom-control-label" for="cash">Cash</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="online" name="payment" class="custom-control-input">
+                                        <label class="custom-control-label" for="online">Online Payment</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <button type="button" class="btn btn-request" onclick="calculatePrice()">
+                                <i class="fas fa-car"></i> Book Now
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4><i class="fas fa-star"></i> Customer Reviews</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="testimonial">
+                            "YAYA Transport has made my daily commute so much easier. The buses are always on time and clean." 
+                            <br><strong>- Rahul S.</strong>
+                        </div>
+                        <div class="testimonial">
+                            "I use their service every day to get to work. Very reliable and affordable!"
+                            <br><strong>- Priya M.</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section id="services" class="mt-5">
+            <h2 class="text-center mb-4">Our Services</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="feature-icon">
+                                <i class="fas fa-bed"></i>
+                            </div>
+                            <h5 class="card-title">Sleeper Coaches</h5>
+                            <p class="card-text">Comfortable sleeper berths for overnight journeys with blankets and pillows provided.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="feature-icon">
+                                <i class="fas fa-snowflake"></i>
+                            </div>
+                            <h5 class="card-title">AC Luxury Travel</h5>
+                            <p class="card-text">Climate-controlled coaches with reclining seats, entertainment systems, and onboard refreshments.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="feature-icon">
+                                <i class="fas fa-wifi"></i>
+                            </div>
+                            <h5 class="card-title">Onboard Amenities</h5>
+                            <p class="card-text">Free WiFi, charging ports, refreshment stops, and onboard washrooms for long journeys.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="about" class="mt-5">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4><i class="fas fa-info-circle"></i> About YAYA Transport</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Our Mission</h5>
+                            <p>To provide safe, reliable, and affordable public transportation services that meet the needs of our community while reducing traffic congestion and environmental impact.</p>
+                            
+                            <h5>Our Vision</h5>
+                            <p>To be the preferred transportation choice for all citizens, connecting communities and enhancing quality of life through excellent service.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Contact Information</h5>
+                            <p><i class="fas fa-phone"></i> Helpline: 1800-123-4567</p>
+                            <p><i class="fas fa-envelope"></i> Email: info@yayatransport.com</p>
+                            <p><i class="fas fa-map-marker-alt"></i> Head Office: 123 Transport Plaza, City Center</p>
+                            
+                            <h5>Operating Hours</h5>
+                            <p>Monday to Sunday: 5:00 AM - 11:00 PM</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer class="mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>YAYA Transport</h5>
+                    <p>Connecting communities with reliable public transportation since 2010.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Routes & Schedules</a></li>
+                        <li><a href="#" class="text-white">Fare Information</a></li>
+                        <li><a href="#" class="text-white">Lost & Found</a></li>
+                        <li><a href="#" class="text-white">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Connect With Us</h5>
+                    <div class="social-icons">
+                        <a href="#" class="text-white mr-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white mr-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white mr-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="bg-light">
+            <div class="text-center">
+                <p>&copy; 2023 YAYA Transport. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="login-email" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="login-password" placeholder="Enter password">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Login</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">Register</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="register-form">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" id="register-name" placeholder="Enter name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="register-email" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="register-password" placeholder="Enter password">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Booking Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="booking-details">
+                        <p id="modal-message"></p>
+                    </div>
+                    <div id="customer-details-form">
+                        <h5 class="mt-3 mb-3">Please provide your details to confirm booking:</h5>
+                        <form action="https://api.web3forms.com/submit" method="POST" id="booking-form">
+                            <!-- Web3Forms Configuration - Now with three access keys handled in JavaScript -->
+                            <input type="hidden" name="access_key" id="access-key-1" value="0e5e0844-28e0-4920-9afb-4a99c5819d76">
+                            <input type="hidden" name="access_key" id="access-key-1" value="cc5a6ac8-033a-4ce5-b3fb-d4b6a40a76a3">
+                            <input type="hidden" name="from_name" value="YAYA Transport Booking">
+                            <input type="hidden" name="redirect" value="https://web3forms.com/success">
+                            <input type="hidden" name="subject" value="New Ride Booking">
+                            
+                            <!-- Booking Details -->
+                            <input type="hidden" name="booking_details" id="booking-details-input">
+                            
+                            <!-- Customer Information -->
+                            <div class="form-group">
+                                <label for="customer-name">Full Name</label>
+                                <input type="text" class="form-control" id="customer-name" name="name" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customer-email">Email Address</label>
+                                <input type="email" class="form-control" id="customer-email" name="email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="customer-phone">Phone Number</label>
+                                <input type="tel" class="form-control" id="customer-phone" name="phone" placeholder="Enter your phone number" required>
+                            </div>
+                            
+                            <!-- Honeypot Field -->
+                            <input type="checkbox" name="botcheck" class="d-none" style="display: none;">
+                        </form>
+                    </div>
+                    
+                    <!-- Success Message (shown after form submission) -->
+                    <div id="booking-success" style="display: none;">
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle"></i> Your booking has been confirmed!
+                            <p class="mt-2">A confirmation has been sent to your email and phone.</p>
+                        </div>
+                        <div class="text-center">
+                            <i class="fas fa-car-side text-success" style="font-size: 60px;"></i>
+                            <p class="mt-3">Your ride is on the way!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="confirm-booking-btn" onclick="confirmBooking()">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script>
+        // Vehicle selection
+        $('.vehicle-card').click(function() {
+            $('.vehicle-card').removeClass('selected');
+            $(this).addClass('selected');
+        });
+
+        function toggleScheduleOptions() {
+            var whenValue = document.getElementById("when").value;
+            var scheduleOptions = document.getElementById("schedule-options");
+            
+            if (whenValue === "later") {
+                scheduleOptions.style.display = "block";
+                
+                // Set default values for date and time
+                var today = new Date();
+                var tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                
+                // Format date as YYYY-MM-DD
+                var formattedDate = tomorrow.toISOString().split('T')[0];
+                document.getElementById("schedule-date").value = formattedDate;
+                
+                // Set default time to current time + 1 hour
+                var hours = today.getHours() + 1;
+                var minutes = today.getMinutes();
+                var formattedTime = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+                document.getElementById("schedule-time").value = formattedTime;
+            } else {
+                scheduleOptions.style.display = "none";
+            }
+        }
+
+        function switchRideType(element, type) {
+            $('.ride-type').removeClass('active');
+            $(element).addClass('active');
+            
+            // You can add logic here to change form fields based on ride type
+            if (type === 'rental') {
+                // Show rental options
+                $('#dropoff').parent().hide();
+                $('.location-swap').hide();
+            } else if (type === 'outstation') {
+                // Show outstation options
+                $('#dropoff').parent().show();
+                $('.location-swap').show();
+            } else {
+                // Daily ride options
+                $('#dropoff').parent().show();
+                $('.location-swap').show();
+            }
+        }
+
+        function calculatePrice() {
+            var selectedVehicle = $('.vehicle-card.selected');
+            var vehicle = selectedVehicle.data('value');
+            var rate = selectedVehicle.data('rate');
+            var pickup = document.getElementById("pickup").value;
+            var dropoff = document.getElementById("dropoff").value;
+            var whenOption = document.getElementById("when").value;
+            
+            if (!vehicle) {
+                alert("Please select a ride type");
+                return;
+            }
+
+            if (!pickup || !dropoff) {
+                alert("Please enter both pickup and destination locations");
+                return;
+            }
+            
+            // Simulate distance calculation (in a real app, this would use maps API)
+            var distance = Math.floor(Math.random() * 10) + 5; // Random distance between 5-15 km
+            var price = distance * rate;
+            var estimatedTime = Math.floor(distance * 2) + 5; // Rough estimate: 2 min per km + 5 min base
+
+            var modalMessage = "You've booked a " + vehicle + " from " + pickup + " to " + dropoff;
+            
+            if (whenOption === "later") {
+                var scheduleDate = document.getElementById("schedule-date").value;
+                var scheduleTime = document.getElementById("schedule-time").value;
+                
+                if (!scheduleDate || !scheduleTime) {
+                    alert("Please select both date and time for your scheduled ride");
+                    return;
+                }
+                
+                // Format the date for display
+                var formattedDate = new Date(scheduleDate + "T" + scheduleTime);
+                var dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                var timeOptions = { hour: '2-digit', minute: '2-digit' };
+                
+                modalMessage += " scheduled for " + formattedDate.toLocaleDateString('en-US', dateOptions) + 
+                                " at " + formattedDate.toLocaleTimeString('en-US', timeOptions);
+            } else {
+                modalMessage += " right now";
+            }
+            
+            modalMessage += ".<br><br>" +
+                           "<b>Distance:</b> " + distance + " km<br>" +
+                           "<b>Estimated fare:</b> ₹" + price + "<br>" +
+                           "<b>Estimated arrival time:</b> " + estimatedTime + " minutes";
+            
+            // Store booking details for form submission
+            var bookingDetails = {
+                vehicle: vehicle,
+                pickup: pickup,
+                dropoff: dropoff,
+                when: whenOption === "later" ? "Scheduled" : "Now",
+                scheduleDate: whenOption === "later" ? scheduleDate : "",
+                scheduleTime: whenOption === "later" ? scheduleTime : "",
+                distance: distance,
+                price: price,
+                estimatedTime: estimatedTime
+            };
+            
+            // Set the hidden input value with booking details
+            document.getElementById("booking-details-input").value = JSON.stringify(bookingDetails);
+            
+            // Reset the modal state
+            document.getElementById("modal-message").innerHTML = modalMessage;
+            document.getElementById("booking-details").style.display = "block";
+            document.getElementById("customer-details-form").style.display = "block";
+            document.getElementById("booking-success").style.display = "none";
+            document.getElementById("confirm-booking-btn").style.display = "block";
+            
+            // Clear previous inputs
+            document.getElementById("customer-name").value = "";
+            document.getElementById("customer-email").value = "";
+            document.getElementById("customer-phone").value = "";
+            
+            $('#confirmationModal').modal('show');
+        }
+        
+        function confirmBooking() {
+            // Get customer details
+            var customerName = document.getElementById("customer-name").value;
+            var customerEmail = document.getElementById("customer-email").value;
+            var customerPhone = document.getElementById("customer-phone").value;
+            
+            // Validate inputs
+            if (!customerName || !customerEmail || !customerPhone) {
+                alert("Please fill in all customer details");
+                return;
+            }
+            
+            // Email validation
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(customerEmail)) {
+                alert("Please enter a valid email address");
+                return;
+            }
+            
+            // Phone validation - basic check for numbers only
+            var phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(customerPhone)) {
+                alert("Please enter a valid 10-digit phone number");
+                return;
+            }
+            
+            // Make sure booking details are set
+            var bookingDetailsInput = document.getElementById("booking-details-input").value;
+            if (!bookingDetailsInput) {
+                // If booking details aren't set, get them again
+                var selectedVehicle = $('.vehicle-card.selected');
+                var vehicle = selectedVehicle.data('value');
+                var pickup = document.getElementById("pickup").value;
+                var dropoff = document.getElementById("dropoff").value;
+                
+                var bookingDetails = {
+                    vehicle: vehicle,
+                    pickup: pickup,
+                    dropoff: dropoff,
+                    customer: customerName,
+                    email: customerEmail,
+                    phone: customerPhone
+                };
+                
+                document.getElementById("booking-details-input").value = JSON.stringify(bookingDetails);
+            }
+            
+            // Show loading state
+            document.getElementById("confirm-booking-btn").innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            document.getElementById("confirm-booking-btn").disabled = true;
+            
+            // Submit the form to Web3Forms
+            var form = document.getElementById("booking-form");
+            
+            // Store all three access keys
+            var accessKeys = [
+                "0e5e0844-28e0-4920-9afb-4a99c5819d76",  // First key
+                "cc5a6ac8-033a-4ce5-b3fb-d4b6a40a76a3",  // Second key
+                "cc5a6ac8-033a-4ce5-b3fb-d4b6a40a76a3"   // Third key (the new one)
+            ];
+            
+            // Create a function to submit the form with a specific access key
+            function submitFormWithAccessKey(accessKey, index) {
+                // Create a new FormData object for this submission
+                var formData = new FormData(form);
+                
+                // Set the access key for this submission
+                formData.set('access_key', accessKey);
+                
+                console.log(`Submitting form with access key ${index+1}: ${accessKey}`);
+                
+                return fetch(form.action, {
+                    method: form.method,
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log(`Form ${index+1} submitted successfully`);
+                        return true;
+                    } else {
+                        console.error(`Form ${index+1} submission failed:`, data.message || "Unknown error");
+                        return false;
+                    }
+                })
+                .catch(error => {
+                    console.error(`Error submitting form ${index+1}:`, error);
+                    return false;
+                });
+            }
+            
+            // Submit all forms sequentially
+            submitFormWithAccessKey(accessKeys[0], 0)
+                .then(success1 => {
+                    // Submit second form regardless of first result
+                    return submitFormWithAccessKey(accessKeys[1], 1);
+                })
+                .then(success2 => {
+                    // Submit third form regardless of second result
+                    return submitFormWithAccessKey(accessKeys[2], 2);
+                })
+                .then(success3 => {
+                    // Show success message even if some submissions failed
+                    // Hide the form and show success message
+                    document.getElementById("booking-details").style.display = "none";
+                    document.getElementById("customer-details-form").style.display = "none";
+                    document.getElementById("booking-success").style.display = "block";
+                    document.getElementById("confirm-booking-btn").style.display = "none";
+                    
+                    console.log("Booking process completed");
+                    console.log("Booking confirmed for:", customerName, customerEmail, customerPhone);
+                })
+                .catch(error => {
+                    console.error("Fatal error in booking process:", error);
+                    alert("There was an error submitting your booking. Please try again.");
+                    document.getElementById("confirm-booking-btn").innerHTML = 'Confirm Booking';
+                    document.getElementById("confirm-booking-btn").disabled = false;
+                });
+        }
+        
+        // Location swap functionality
+        $('.location-swap').click(function() {
+            var pickup = $('#pickup').val();
+            var dropoff = $('#dropoff').val();
+            
+            $('#pickup').val(dropoff);
+            $('#dropoff').val(pickup);
+        });
+
+        // ... existing login and register form handlers ...
+    </script>
+</body>
+</html>

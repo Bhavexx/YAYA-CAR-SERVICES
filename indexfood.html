@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAYA CAR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e23744;
+        }
+
+        .logo i {
+            margin-right: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #e23744;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            display: flex;
+            max-width: 700px;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .location-select {
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            background: #f8f8f8;
+            border-right: 1px solid #ddd;
+            color: #333;
+        }
+
+        .location-select i {
+            margin-right: 8px;
+            color: #e23744;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 15px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 40px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #1c1c1c;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            background: #f8f8f8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: #e23744;
+            font-size: 24px;
+        }
+
+        .category-name {
+            font-weight: 500;
+        }
+
+        /* Restaurants Section */
+        .restaurants {
+            padding: 40px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .restaurant-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .restaurant-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .restaurant-info {
+            padding: 15px;
+        }
+
+        .restaurant-info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .rating {
+            color: #e23744;
+            margin: 5px 0;
+        }
+
+        .dishes-list {
+            margin-top: 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .restaurant-card:hover .dishes-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dish-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .dish-item button {
+            background-color: #e23744;
+            color: white;
+            padding: 4px 8px;
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+        .dish-item button:hover {
+            background-color: #c62c38;
+        }
+
+        /* Order Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .close {
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .order-items {
+            margin: 20px 0;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-total {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #e23744;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        .submit-btn {
+            background-color: #e23744;
+            color: white;
+            padding: 12px 20px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #c62c38;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 40px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .contact-form textarea {
+            grid-column: span 2;
+            resize: vertical;
+            min-height: 150px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1c1c1c;
+            color: white;
+            padding: 40px 5% 20px;
+            margin-top: 40px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #e23744;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a:hover {
+            color: #e23744;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-icons i {
+            font-size: 20px;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .location-select {
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+                padding: 10px 15px;
+            }
+            
+            .contact-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-form textarea {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo"><i class="fas fa-utensils"></i>YAYA CAR</a>
+            <div class="nav-links">
+                <a href="#">Home</a>
+                <a href="#restaurants">Restaurants</a>
+                <a href="#contact">Contact</a>
+                <a href="#" style="color: #e23744;">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Discover the best food & drinks in your city</h1>
+        <div class="search-container">
+            <div class="location-select">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>Nagpur</span>
+            </div>
+            <input type="text" class="search-input" placeholder="Search for restaurant, cuisine or a dish">
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
+        <h2 class="section-title">Quick Searches</h2>
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-pizza-slice"></i></div>
+                <div class="category-name">Pizza</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-hamburger"></i></div>
+                <div class="category-name">Burger</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-fish"></i></div>
+                <div class="category-name">Sushi</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-drumstick-bite"></i></div>
+                <div class="category-name">Chicken</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-pepper-hot"></i></div>
+                <div class="category-name">Mexican</div>
+            </div>
+            <div class="category-card">
+                <div class="category-icon"><i class="fas fa-cookie"></i></div>
+                <div class="category-name">Dessert</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Restaurants Section -->
+    <section id="restaurants" class="restaurants">
+        <h2 class="section-title">Popular Restaurants</h2>
+        <div id="restaurantGrid" class="restaurant-grid">
+            <!-- Restaurants will be populated by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeOrderModal()">&times;</span>
+            <div id="orderDetails"></div>
+            <form id="orderForm">
+                <!-- Hidden fields for order data -->
+                <input type="hidden" id="orderRestaurant" value="New Order">
+                <input type="hidden" id="hiddenRestaurant">
+                <input type="hidden" id="hiddenDishes">
+                <input type="hidden" id="hiddenTotal">
+                
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="orderName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="orderEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" id="orderPhone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Delivery Address</label>
+                    <input type="text" id="orderLocation" name="address" required>
+                </div>
+                <button type="submit" class="submit-btn">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2 class="section-title">Contact Us</h2>
+        <form id="contactForm" class="contact-form">
+            <div class="form-group">
+                <label for="contactName">Name</label>
+                <input type="text" id="contactName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="contactEmail">Email</label>
+                <input type="email" id="contactEmail" name="email" required>
+            </div>
+            <textarea id="contactMessage" name="message" placeholder="Your message..." required></textarea>
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About YAYA CAR</h3>
+                <ul>
+                    <li><a href="#">Who We Are</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Report Fraud</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>For Restaurants</h3>
+                <ul>
+                    <li><a href="#">Partner With Us</a></li>
+                    <li><a href="#">Apps For You</a></li>
+                    <li><a href="#">Business App</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Learn More</h3>
+                <ul>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Security</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Sitemap</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Social Links</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 YAYA CAR. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Access keys for Web3Forms
+        const ACCESS_KEY_1 = "0e5e0844-28e0-4920-9afb-4a99c5819d76";
+        const ACCESS_KEY_2 = "cc5a6ac8-033a-4ce5-b3fb-d4b6a40a76a3";
+        const WEB3FORMS_URL = "https://api.web3forms.com/submit";
+
+        // Restaurant data with dishes
+        const restaurants = [
+            {
+                name: "Pizza Paradise",
+                rating: 4.5,
+                cuisine: "Italian",
+                image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400",
+                dishes: [
+                    { name: "Margherita Pizza", price: 12.99 },
+                    { name: "Pepperoni Pizza", price: 14.99 },
+                    { name: "Four Cheese Pizza", price: 15.99 },
+                    { name: "Vegetarian Pizza", price: 13.99 },
+                    { name: "BBQ Chicken Pizza", price: 16.99 },
+                    { name: "Hawaiian Pizza", price: 14.99 },
+                    { name: "Mushroom Truffle Pizza", price: 18.99 },
+                    { name: "Meat Lovers Pizza", price: 17.99 },
+                    { name: "Buffalo Pizza", price: 15.99 },
+                    { name: "Spinach & Feta Pizza", price: 14.99 },
+                    { name: "Supreme Pizza", price: 19.99 },
+                    { name: "Garlic Bread", price: 5.99 }
+                ]
+            },
+            {
+                name: "Burger Bliss",
+                rating: 4.3,
+                cuisine: "American",
+                image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400",
+                dishes: [
+                    { name: "Classic Burger", price: 9.99 },
+                    { name: "Cheeseburger", price: 10.99 },
+                    { name: "Bacon Burger", price: 12.99 },
+                    { name: "Mushroom Swiss Burger", price: 11.99 },
+                    { name: "BBQ Burger", price: 13.99 },
+                    { name: "Veggie Burger", price: 10.99 },
+                    { name: "Double Cheeseburger", price: 14.99 },
+                    { name: "Chicken Burger", price: 11.99 },
+                    { name: "Fish Burger", price: 12.99 },
+                    { name: "Avocado Burger", price: 13.99 },
+                    { name: "Spicy Jalapeno Burger", price: 12.99 },
+                    { name: "French Fries", price: 4.99 }
+                ]
+            },
+            {
+                name: "Sushi Supreme",
+                rating: 4.7,
+                cuisine: "Japanese",
+                image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400",
+                dishes: [
+                    { name: "California Roll", price: 8.99 },
+                    { name: "Spicy Tuna Roll", price: 9.99 },
+                    { name: "Dragon Roll", price: 12.99 },
+                    { name: "Rainbow Roll", price: 13.99 },
+                    { name: "Salmon Nigiri", price: 7.99 },
+                    { name: "Tuna Nigiri", price: 8.99 },
+                    { name: "Tempura Roll", price: 11.99 },
+                    { name: "Philadelphia Roll", price: 10.99 },
+                    { name: "Eel Roll", price: 12.99 },
+                    { name: "Vegetable Roll", price: 7.99 },
+                    { name: "Miso Soup", price: 3.99 },
+                    { name: "Edamame", price: 4.99 }
+                ]
+            },
+            {
+                name: "Taco Temple",
+                rating: 4.4,
+                cuisine: "Mexican",
+                image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400",
+                dishes: [
+                    { name: "Beef Taco", price: 3.99 },
+                    { name: "Chicken Taco", price: 3.99 },
+                    { name: "Fish Taco", price: 4.99 },
+                    { name: "Shrimp Taco", price: 5.99 },
+                    { name: "Veggie Taco", price: 3.99 },
+                    { name: "Burrito", price: 8.99 },
+                    { name: "Quesadilla", price: 7.99 },
+                    { name: "Nachos", price: 9.99 },
+                    { name: "Enchiladas", price: 10.99 },
+                    { name: "Fajitas", price: 12.99 },
+                    { name: "Guacamole & Chips", price: 5.99 },
+                    { name: "Mexican Rice", price: 3.99 }
+                ]
+            },
+            {
+                name: "Indian Spice",
+                rating: 4.8,
+                cuisine: "Indian",
+                image: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=400",
+                dishes: [
+                    { name: "Chicken Biryani", price: 16.99 },
+                    { name: "Butter Chicken", price: 15.99 },
+                    { name: "Chicken Tikka Masala", price: 15.99 },
+                    { name: "Paneer Butter Masala", price: 14.99 },
+                    { name: "Dal Makhani", price: 12.99 },
+                    { name: "Vegetable Biryani", price: 14.99 },
+                    { name: "Garlic Naan", price: 3.99 },
+                    { name: "Plain Naan", price: 2.99 },
+                    { name: "Samosas (2 pcs)", price: 5.99 },
+                    { name: "Palak Paneer", price: 13.99 },
+                    { name: "Tandoori Roti", price: 2.49 },
+                    { name: "Gulab Jamun", price: 4.99 },
+                    { name: "Mango Lassi", price: 4.99 },
+                    { name: "Raita", price: 2.99 },
+                    { name: "Chicken 65", price: 12.99 }
+                ]
+            }
+        ];
+
+        let currentOrder = {
+            restaurant: '',
+            dishes: [],
+            total: 0
+        };
+
+        // Populate restaurants
+        function displayRestaurants() {
+            const restaurantGrid = document.getElementById('restaurantGrid');
+            
+            restaurants.forEach(restaurant => {
+                const card = document.createElement('div');
+                card.className = 'restaurant-card';
+                
+                let dishesHtml = '<div class="dishes-list">';
+                restaurant.dishes.forEach(dish => {
+                    dishesHtml += `
+                        <div class="dish-item">
+                            <span>${dish.name}</span>
+                            <div>
+                                <span>$${dish.price.toFixed(2)}</span>
+                                <button onclick="addToOrder('${restaurant.name}', '${dish.name}', ${dish.price})">Add</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                dishesHtml += '</div>';
+                
+                card.innerHTML = `
+                    <img src="${restaurant.image}" alt="${restaurant.name}">
+                    <div class="restaurant-info">
+                        <h3>${restaurant.name}</h3>
+                        <p>${restaurant.cuisine}</p>
+                        <div class="rating">
+                            ${'★'.repeat(Math.floor(restaurant.rating))}${restaurant.rating % 1 >= 0.5 ? '½' : ''}
+                            ${restaurant.rating}
+                        </div>
+                        ${dishesHtml}
+                    </div>
+                `;
+                
+                restaurantGrid.appendChild(card);
+            });
+        }
+
+        // Add item to order
+        function addToOrder(restaurantName, dishName, price) {
+            if (currentOrder.restaurant && currentOrder.restaurant !== restaurantName) {
+                alert('Please complete your current order before ordering from another restaurant.');
+                return;
+            }
+            
+            currentOrder.restaurant = restaurantName;
+            currentOrder.dishes.push({ name: dishName, price: price });
+            currentOrder.total += price;
+            
+            showOrderModal();
+        }
+
+        // Show order modal
+        function showOrderModal() {
+            const modal = document.getElementById('orderModal');
+            const orderDetails = document.getElementById('orderDetails');
+            
+            let detailsHtml = `<h3>Order from ${currentOrder.restaurant}</h3>`;
+            detailsHtml += '<div class="order-items">';
+            currentOrder.dishes.forEach(dish => {
+                detailsHtml += `
+                    <div class="order-item">
+                        <span>${dish.name}</span>
+                        <span>$${dish.price.toFixed(2)}</span>
+                    </div>
+                `;
+            });
+            detailsHtml += `
+                <div class="order-total">
+                    <strong>Total:</strong>
+                    <strong>$${currentOrder.total.toFixed(2)}</strong>
+                </div>
+            `;
+            
+            orderDetails.innerHTML = detailsHtml;
+            modal.style.display = 'block';
+            
+            // Set the order restaurant as the subject
+            document.getElementById('orderRestaurant').value = `New Order from ${currentOrder.restaurant}`;
+        }
+
+        // Close order modal
+        function closeOrderModal() {
+            const modal = document.getElementById('orderModal');
+            modal.style.display = 'none';
+        }
+
+        // Function to submit form to Web3Forms with a specific access key
+        async function submitToWeb3Forms(formData, accessKey) {
+            // Create a copy of the form data and add the access key
+            const formDataCopy = new FormData();
+            for (let [key, value] of formData.entries()) {
+                formDataCopy.append(key, value);
+            }
+            formDataCopy.append('access_key', accessKey);
+            formDataCopy.append('botcheck', '');
+            formDataCopy.append('redirect', 'https://web3forms.com/success');
+            
+            try {
+                const response = await fetch(WEB3FORMS_URL, {
+                    method: 'POST',
+                    body: formDataCopy
+                });
+                return response.ok;
+            } catch (error) {
+                console.error(`Error submitting to access key ${accessKey}:`, error);
+                return false;
+            }
+        }
+
+        // Handle order submission - send to both email addresses
+        document.getElementById('orderForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Update hidden fields with order data
+            document.getElementById('hiddenRestaurant').value = currentOrder.restaurant;
+            document.getElementById('hiddenDishes').value = JSON.stringify(currentOrder.dishes);
+            document.getElementById('hiddenTotal').value = currentOrder.total.toFixed(2);
+            
+            // Add loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Placing Order...';
+            
+            // Create new FormData instance
+            const formData = new FormData(this);
+            
+            // Add order details to form data
+            formData.append('subject', `New Order from ${currentOrder.restaurant}`);
+            formData.append('from_name', 'YAYA CAR FOOD Delivery');
+            formData.append('restaurant', currentOrder.restaurant);
+            formData.append('dishes', JSON.stringify(currentOrder.dishes));
+            formData.append('total', currentOrder.total.toFixed(2));
+            
+            // Submit to both email addresses (both access keys)
+            const success1 = await submitToWeb3Forms(formData, ACCESS_KEY_1);
+            const success2 = await submitToWeb3Forms(formData, ACCESS_KEY_2);
+            
+            if (success1 && success2) {
+                alert('Order placed successfully! We will contact you shortly.');
+                currentOrder = { restaurant: '', dishes: [], total: 0 };
+                closeOrderModal();
+            } else if (success1 || success2) {
+                alert('Order placed successfully, but there was an issue sending to one of our systems. We will still process your order.');
+                currentOrder = { restaurant: '', dishes: [], total: 0 };
+                closeOrderModal();
+            } else {
+                alert('Error placing order. Please try again.');
+            }
+            
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Place Order';
+        });
+
+        // Contact form submission - send to both email addresses
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Add loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Sending...';
+            
+            // Create new FormData instance
+            const formData = new FormData(this);
+            
+            // Add contact form details
+            formData.append('subject', 'New Contact Message');
+            formData.append('from_name', 'YAYA CAR Contact Form');
+            
+            // Submit to both email addresses (both access keys)
+            const success1 = await submitToWeb3Forms(formData, ACCESS_KEY_1);
+            const success2 = await submitToWeb3Forms(formData, ACCESS_KEY_2);
+            
+            if (success1 && success2) {
+                alert('Thank you for your message! We will get back to you soon.');
+                this.reset();
+            } else if (success1 || success2) {
+                alert('Message sent successfully, but there was an issue with one of our systems. We will still receive your message.');
+                this.reset();
+            } else {
+                alert('Error sending message. Please try again.');
+            }
+            
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Send Message';
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            displayRestaurants();
+        });
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('orderModal');
+            if (event.target == modal) {
+                closeOrderModal();
+            }
+        }
+    </script>
+</body>
+</html>

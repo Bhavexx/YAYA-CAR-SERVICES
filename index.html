@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAYACAR SERVICES - India</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: #000;
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ddd;
+        }
+
+        /* Contact Form Styles */
+        .contact-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            z-index: 1001;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .contact-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: #000;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .submit-btn:hover {
+            background: #333;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        /* Adjust existing styles */
+        #map {
+            height: calc(100vh - 60px);
+            width: 100%;
+            margin-top: 60px;
+        }
+
+        .search-container {
+            top: 80px;
+        }
+
+        /* Service Icons */
+        .service-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: #000;
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+                color: white;
+                font-size: 24px;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+        }
+
+        /* Front Page Styles */
+        .front-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            z-index: 1002;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.5s ease;
+        }
+
+        .front-page.hide {
+            transform: translateY(-100%);
+        }
+
+        .logo-container {
+            margin-bottom: 2rem;
+            animation: fadeIn 2s ease;
+        }
+
+        .logo-container img {
+            width: 300px;
+            height: auto;
+        }
+
+        .services-animation {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .service-item {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .service-item.animate {
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1001;
+            background: #000;
+            color: white;
+            border: 1px solid white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Theme Colors */
+        :root {
+            --primary-color: #000;
+            --secondary-color: #fff;
+        }
+
+        .light-theme {
+            --primary-color: #fff;
+            --secondary-color: #000;
+        }
+
+        /* Apply theme colors */
+        .navbar, .ride-panel {
+            background: var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        .nav-links a, .logo {
+            color: var(--secondary-color);
+        }
+
+        /* New Map Styles */
+        .custom-map-control {
+            margin: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        .leaflet-popup-content {
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .leaflet-popup-content b {
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .leaflet-control-locate {
+            border: 2px solid rgba(0,0,0,0.2);
+            background-clip: padding-box;
+        }
+
+        /* Add this to make search input more India-specific */
+        .search-input::placeholder {
+            content: "Search Indian cities...";
+        }
+
+        /* About Section Styles */
+        .about-section {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            z-index: 1001;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .about-section h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .about-section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .about-section li {
+            margin-bottom: 10px;
+        }
+
+        .about-section a {
+            color: #0077B5;
+            text-decoration: none;
+        }
+
+        .about-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Portfolio Section Styles */
+        .portfolio-section {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            z-index: 999;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-section.show {
+            transform: translateY(0);
+        }
+
+        .portfolio-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 20px;
+        }
+
+        .portfolio-image {
+            width: 300px;
+            height: auto;
+        }
+
+        .portfolio-text {
+            text-align: left;
+        }
+
+        .portfolio-text h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .portfolio-text p {
+            font-size: 16px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .show-portfolio {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: black;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            border: 1px solid white;
+        }
+
+        @media (max-width: 768px) {
+            .portfolio-content {
+                flex-direction: column;
+            }
+
+            .portfolio-image {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Front Page -->
+    <div class="front-page" id="frontPage">
+        <div class="logo-container">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/yaya-car-high-resolution-logo%20(2)-i9XYrDlJc9OXlv64bopTQeJgNI7A57.png" alt="Yaya Car Logo">
+        </div>
+        <h1>YAYA CAR ALL IN ONE SERVICES</h1>
+        <div class="services-animation">
+            <div class="service-item">
+                <div class="service-icon">🍽️</div>
+                <h3>Food Delivery</h3>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">🧳</div>
+                <h3>Luggage Transport</h3>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">🚌</div>
+                <h3>Public Transport</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">YAYACAR SERVICES </a>
+            <button class="menu-toggle">☰</button>
+            <div class="nav-links">
+                <a href="C:\Users\om\Desktop\certificate course\college project final years\6 sem project\6 sem projecy\indexfood.html"><span>🍽️</span> Food Transport</a>
+                <a href="#"><span>🚗</span> Transport</a>
+                <a href="C:\Users\om\Desktop\certificate course\college project final years\6 sem project\6 sem projecy\indexluggage.html"><span>🧳</span> Luggage</a>
+                <a href="C:\Users\om\Desktop\certificate course\college project final years\6 sem project\6 sem projecy\indexpublic.html"><span>🚌</span> Public Transport</a>
+                <a href="#" id="contact-link"><span>📞</span> Contact Us</a>
+                
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle">Switch Theme</button>
+
+    <!-- Contact Form -->
+    <div class="overlay" id="overlay"></div>
+    <div class="contact-form" id="contact-form">
+        <button class="close-btn">&times;</button>
+        <h2>Contact Us</h2>
+        <form id="contact" action="https://api.web3forms.com/submit" method="POST">
+            <input type="hidden" name="access_key" value="0e5e0844-28e0-4920-9afb-4a99c5819d76">
+            <input type="hidden" name="access_key" value="cc5a6ac8-033a-4ce5-b3fb-d4b6a40a76a3">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </div>
+
+    <!-- About Section -->
+    
+
+    <!-- Map and Ride Content -->
+    <div id="map"></div>
+    
+    <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search Indian cities...">
+    </div>
+
+    <div class="ride-panel">
+        <div class="ride-options">
+            <div class="ride-option" data-price="10">
+                <img src="https://sjc.microlink.io/eZo-NO_xjwQl3FLbMr6_dogSMtrxqE4MsXI9Mx_yax9G2OgCf2qwnksTEo6Lf-T0zhWMGwijzwEJsSdOhFKdzA.jpeg" alt="Economy">
+                <span class="ride-option-name">Economy</span>
+                <span class="ride-option-price">$10</span>
+            </div>
+            <div class="ride-option" data-price="15">
+                <img src="https://sjc.microlink.io/eZo-NO_xjwQl3FLbMr6_dogSMtrxqE4MsXI9Mx_yax9G2OgCf2qwnksTEo6Lf-T0zhWMGwijzwEJsSdOhFKdzA.jpeg" alt="Comfort">
+                <span class="ride-option-name">Comfort</span>
+                <span class="ride-option-price">$15</span>
+            </div>
+            <div class="ride-option" data-price="20">
+                <img src="https://sjc.microlink.io/eZo-NO_xjwQl3FLbMr6_dogSMtrxqE4MsXI9Mx_yax9G2OgCf2qwnksTEo6Lf-T0zhWMGwijzwEJsSdOhFKdzA.jpeg" alt="Premium">
+                <span class="ride-option-name">Premium</span>
+                <span class="ride-option-price">$20</span>
+            </div>
+        </div>
+        <button class="confirm-button" disabled>Confirm Ride</button>
+    </div>
+
+    <!-- Portfolio Section -->
+    <div class="portfolio-section" id="portfolioSection">
+        <div class="portfolio-content">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/yaya-car-high-resolution-logo%20(2)-OQ9jwKosRf5VPLzMID7aw9Xy4whlU6.png" alt="Yaya Car Logo" class="portfolio-image">
+            <div class="portfolio-text">
+                <h2>Welcome to YAYACAR</h2>
+                <p>"Your World, Your Way, Our YAYACAR ANYWAY"</p>
+                <p>We provide premium transportation services including food delivery, personal transport, luggage handling, and public transportation solutions. Our commitment is to make your journey seamless and comfortable.</p>
+                FOUNDER BY: 
+                <a href="https://www.linkedin.com/in/bhavik-naik-82a8bb265" target="_blank" style="color: white;">Bhavik Naik</a> 
+                | 
+                <a href="https://www.linkedin.com/in/sumaiyya-sayyad-23566a275/" target="_blank" style="color: white;">Summaiya Sayyad</a>
+            </div>
+        </div>
+    </div>
+    <button class="show-portfolio" id="showPortfolio">About Us</button>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+    <script>
+        // Front page animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const frontPage = document.getElementById('frontPage');
+            const serviceItems = document.querySelectorAll('.service-item');
+
+            // Animate service items one by one
+            setTimeout(() => {
+                serviceItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('animate');
+                    }, index * 500);
+                });
+            }, 1000);
+
+            // Hide front page after animations
+            setTimeout(() => {
+                frontPage.classList.add('hide');
+            }, 4000);
+        });
+
+        // Theme toggling
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        let isLightTheme = false;
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            body.classList.add('light-theme');
+            isLightTheme = true;
+        }
+
+        themeToggle.addEventListener('click', () => {
+            isLightTheme = !isLightTheme;
+            body.classList.toggle('light-theme');
+            
+            // Save theme preference
+            localStorage.setItem('theme', isLightTheme ? 'light' : 'dark');
+            
+            // Update button text
+            themeToggle.textContent = `Switch to ${isLightTheme ? 'Dark' : 'Light'} Theme`;
+        });
+
+        // Set initial button text
+        themeToggle.textContent = `Switch to ${isLightTheme ? 'Dark' : 'Light'} Theme`;
+
+        // Initialize map centered on India
+        const map = L.map('map', {
+            center: [20.5937, 78.9629], // Center of India
+            zoom: 5,
+            minZoom: 4,
+            maxZoom: 18,
+            maxBounds: [
+                [6.4626, 68.1097], // Southwest coordinates of India
+                [35.6745, 97.3956] // Northeast coordinates of India
+            ]
+        });
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            bounds: [
+                [6.4626, 68.1097], // Southwest coordinates of India
+                [35.6745, 97.3956] // Northeast coordinates of India
+            ]
+        }).addTo(map);
+
+        // Add major Indian cities as markers
+        const indianCities = [
+            { name: "New Delhi", coords: [28.6139, 77.2090] },
+            { name: "Mumbai", coords: [19.0760, 72.8777] },
+            { name: "Bangalore", coords: [12.9716, 77.5946] },
+            { name: "Chennai", coords: [13.0827, 80.2707] },
+            { name: "Kolkata", coords: [22.5726, 88.3639] },
+            { name: "Hyderabad", coords: [17.3850, 78.4867] },
+            { name: "Pune", coords: [18.5204, 73.8567] },
+            { name: "Ahmedabad", coords: [23.0225, 72.5714] }
+        ];
+
+        // Custom icon for cities
+        const cityIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        // Add markers for each city
+        indianCities.forEach(city => {
+            L.marker(city.coords, { icon: cityIcon })
+                .bindPopup(`<b>${city.name}</b><br>Click to select as destination`)
+                .on('click', function() {
+                    document.querySelector('.search-input').value = city.name;
+                })
+                .addTo(map);
+        });
+
+        // Add a geolocation control
+        L.control.locate({
+            position: 'topright',
+            strings: {
+                title: "Show my location"
+            },
+            locateOptions: {
+                maxZoom: 15
+            }
+        }).addTo(map);
+
+        // Style for state boundaries
+        const stateStyle = {
+            color: "#ff7800",
+            weight: 2,
+            opacity: 0.65
+        };
+
+        // Add GeoJSON for Indian states
+        fetch('https://raw.githubusercontent.com/HindustanTimesLabs/shapefiles/master/india_states/india_states.geojson')
+            .then(response => response.json())
+            .then(data => {
+                L.geoJSON(data, {
+                    style: stateStyle,
+                    onEachFeature: function(feature, layer) {
+                        layer.bindPopup(feature.properties.ST_NM);
+                    }
+                }).addTo(map);
+            })
+            .catch(error => console.error('Error loading state boundaries:', error));
+
+        // Add search functionality for Indian cities
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const matches = indianCities.filter(city => 
+                city.name.toLowerCase().includes(searchTerm)
+            );
+            
+            if (matches.length > 0 && searchTerm.length > 2) {
+                const firstMatch = matches[0];
+                map.setView(firstMatch.coords, 13);
+            }
+        });
+
+        // Add custom map controls
+        const customControl = L.control({ position: 'bottomleft' });
+        customControl.onAdd = function(map) {
+            const div = L.DomUtil.create('div', 'custom-map-control');
+            div.innerHTML = `
+                <div style="background: white; padding: 10px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                    <h4>India Service Areas</h4>
+                    <p>We operate in major cities across India</p>
+                </div>
+            `;
+            return div;
+        };
+        customControl.addTo(map);
+
+        // Add scale control
+        L.control.scale().addTo(map);
+
+        // Handle ride selection
+        const rideOptions = document.querySelectorAll('.ride-option');
+        const confirmButton = document.querySelector('.confirm-button');
+        let selectedRide = null;
+
+        rideOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                rideOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                confirmButton.disabled = false;
+                selectedRide = {
+                    type: option.querySelector('.ride-option-name').textContent,
+                    price: option.dataset.price
+                };
+            });
+        });
+
+        // Contact Form Handling
+        const contactLink = document.getElementById('contact-link');
+        const contactForm = document.getElementById('contact-form');
+        const overlay = document.getElementById('overlay');
+        const closeBtn = document.querySelector('.close-btn');
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        contactLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            contactForm.style.display = 'block';
+            overlay.style.display = 'block';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            contactForm.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
+        overlay.addEventListener('click', () => {
+            contactForm.style.display = 'none';
+            aboutSection.style.display = 'none';
+            overlay.style.display = 'none';
+        });
+
+        // Mobile menu toggle
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Handle form submission
+        document.getElementById('contact').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+    
+            try {
+                const response = await fetch(e.target.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+        
+                if (response.ok) {
+                    alert('Message sent successfully!');
+                    e.target.reset();
+                    contactForm.style.display = 'none';
+                    overlay.style.display = 'none';
+                } else {
+                    alert('Error sending message. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+
+        // Handle ride confirmation
+        confirmButton.addEventListener('click', () => {
+            if (selectedRide) {
+                alert(`Booking confirmed!\nRide type: ${selectedRide.type}\nPrice: $${selectedRide.price}`);
+            }
+        });
+
+        // Portfolio section toggle
+        const showPortfolioBtn = document.getElementById('showPortfolio');
+        const portfolioSection = document.getElementById('portfolioSection');
+
+        showPortfolioBtn.addEventListener('click', () => {
+            portfolioSection.classList.toggle('show');
+            showPortfolioBtn.textContent = portfolioSection.classList.contains('show') ? 'Close' : 'About Us';
+        });
+    </script>
+</body>
+</html>
+
