@@ -145,22 +145,53 @@
             margin-top: 60px;
         }
 
+        /* Enhanced Search Container */
         .search-container {
             position: absolute;
             top: 80px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 999;
-            width: 80%;
-            max-width: 400px;
+            width: 90%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 15px;
         }
 
         .search-input {
             width: 100%;
-            padding: 10px;
+            padding: 12px 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
+            background: white;
+        }
+
+        .search-results {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .search-result-item:hover {
+            background: #f5f5f5;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 25px;
+            top: 25px;
+            color: #666;
+            font-size: 20px;
         }
 
         /* Service Icons */
@@ -196,6 +227,11 @@
                 background: none;
                 border: none;
                 cursor: pointer;
+            }
+
+            .search-container {
+                width: 90%;
+                top: 70px;
             }
         }
 
@@ -444,6 +480,26 @@
             border: 1px solid white;
         }
 
+        /* Location marker animation */
+        .location-marker {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.8);
+                opacity: 0.7;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0.8);
+                opacity: 0.7;
+            }
+        }
+
         @media (max-width: 768px) {
             .portfolio-content {
                 flex-direction: column;
@@ -484,10 +540,10 @@
             <a href="#" class="logo">YAYACAR SERVICES</a>
             <button class="menu-toggle">☰</button>
             <div class="nav-links">
-                <a href="indexfood.html"><span>🍽️</span> Food Transport</a>
+                <a href="#"><span>🍽️</span> Food Transport</a>
                 <a href="#"><span>🚗</span> Transport</a>
-                <a href="indexluggage.html"><span>🧳</span> Luggage</a>
-                <a href="indexpublic.html"><span>🚌</span> Public Transport</a>
+                <a href="#"><span>🧳</span> Luggage</a>
+                <a href="#"><span>🚌</span> Public Transport</a>
                 <a href="#" id="contact-link"><span>📞</span> Contact Us</a>
             </div>
         </div>
@@ -521,8 +577,11 @@
     <!-- Map and Ride Content -->
     <div id="map"></div>
     
+    <!-- Enhanced Search Container -->
     <div class="search-container">
-        <input type="text" class="search-input" placeholder="Search Indian cities...">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" placeholder="Search Indian cities..." id="searchInput">
+        <div class="search-results" id="searchResults"></div>
     </div>
 
     <div class="ride-panel" id="ride-panel">
@@ -633,7 +692,7 @@
             ]
         }).addTo(map);
 
-        // Add major Indian cities as markers
+        // Expanded list of Indian cities
         const indianCities = [
             { name: "New Delhi", coords: [28.6139, 77.2090] },
             { name: "Mumbai", coords: [19.0760, 72.8777] },
@@ -642,7 +701,49 @@
             { name: "Kolkata", coords: [22.5726, 88.3639] },
             { name: "Hyderabad", coords: [17.3850, 78.4867] },
             { name: "Pune", coords: [18.5204, 73.8567] },
-            { name: "Ahmedabad", coords: [23.0225, 72.5714] }
+            { name: "Ahmedabad", coords: [23.0225, 72.5714] },
+            { name: "Jaipur", coords: [26.9124, 75.7873] },
+            { name: "Lucknow", coords: [26.8467, 80.9462] },
+            { name: "Kanpur", coords: [26.4499, 80.3319] },
+            { name: "Nagpur", coords: [21.1458, 79.0882] },
+            { name: "Indore", coords: [22.7196, 75.8577] },
+            { name: "Thane", coords: [19.2183, 72.9781] },
+            { name: "Bhopal", coords: [23.2599, 77.4126] },
+            { name: "Visakhapatnam", coords: [17.6868, 83.2185] },
+            { name: "Patna", coords: [25.5941, 85.1376] },
+            { name: "Vadodara", coords: [22.3072, 73.1812] },
+            { name: "Ghaziabad", coords: [28.6692, 77.4538] },
+            { name: "Ludhiana", coords: [30.9010, 75.8573] },
+            { name: "Agra", coords: [27.1767, 78.0081] },
+            { name: "Nashik", coords: [19.9975, 73.7898] },
+            { name: "Faridabad", coords: [28.4089, 77.3178] },
+            { name: "Meerut", coords: [28.9845, 77.7064] },
+            { name: "Rajkot", coords: [22.3039, 70.8022] },
+            { name: "Kalyan-Dombivli", coords: [19.2403, 73.1305] },
+            { name: "Varanasi", coords: [25.3176, 82.9739] },
+            { name: "Srinagar", coords: [34.0837, 74.7973] },
+            { name: "Aurangabad", coords: [19.8762, 75.3433] },
+            { name: "Dhanbad", coords: [23.7957, 86.4304] },
+            { name: "Amritsar", coords: [31.6340, 74.8723] },
+            { name: "Navi Mumbai", coords: [19.0330, 73.0297] },
+            { name: "Allahabad", coords: [25.4358, 81.8463] },
+            { name: "Ranchi", coords: [23.3441, 85.3096] },
+            { name: "Howrah", coords: [22.5958, 88.2636] },
+            { name: "Coimbatore", coords: [11.0168, 76.9558] },
+            { name: "Jabalpur", coords: [23.1815, 79.9864] },
+            { name: "Gwalior", coords: [26.2183, 78.1828] },
+            { name: "Vijayawada", coords: [16.5062, 80.6480] },
+            { name: "Jodhpur", coords: [26.2389, 73.0243] },
+            { name: "Madurai", coords: [9.9252, 78.1198] },
+            { name: "Raipur", coords: [21.2514, 81.6296] },
+            { name: "Kochi", coords: [9.9312, 76.2673] },
+            { name: "Chandigarh", coords: [30.7333, 76.7794] },
+            { name: "Guwahati", coords: [26.1445, 91.7362] },
+            { name: "Bhubaneswar", coords: [20.2961, 85.8245] },
+            { name: "Dehradun", coords: [30.3165, 78.0322] },
+            { name: "Shimla", coords: [31.1048, 77.1734] },
+            { name: "Pondicherry", coords: [11.9416, 79.8083] },
+            { name: "Gangtok", coords: [27.3389, 88.6065] }
         ];
 
         // Custom icon for cities
@@ -655,16 +756,29 @@
             shadowSize: [41, 41]
         });
 
+        // Custom icon for selected location
+        const selectedIcon = L.icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [30, 45],
+            iconAnchor: [15, 45],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+
+        // Store markers for easy access
+        const cityMarkers = {};
+
         // Add markers for each city
         indianCities.forEach(city => {
-            L.marker(city.coords, { icon: cityIcon })
+            const marker = L.marker(city.coords, { icon: cityIcon })
                 .bindPopup(`<b>${city.name}</b><br>Click to select as destination`)
                 .on('click', function() {
-                    document.querySelector('.search-input').value = city.name;
-                    // Show ride panel when a city is selected
-                    document.getElementById('ride-panel').style.display = 'block';
-                })
-                .addTo(map);
+                    selectCity(city.name, city.coords);
+                });
+            
+            marker.addTo(map);
+            cityMarkers[city.name.toLowerCase()] = marker;
         });
 
         // Add a geolocation control
@@ -698,19 +812,77 @@
             })
             .catch(error => console.error('Error loading state boundaries:', error));
 
-        // Add search functionality for Indian cities
-        const searchInput = document.querySelector('.search-input');
+        // Variables for search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        let selectedMarker = null;
+        let currentLocationMarker = null;
+
+        // Function to select a city
+        function selectCity(cityName, coords) {
+            // Update search input
+            searchInput.value = cityName;
+            
+            // Clear previous selected marker
+            if (selectedMarker) {
+                map.removeLayer(selectedMarker);
+            }
+            
+            // Add new selected marker
+            selectedMarker = L.marker(coords, { icon: selectedIcon })
+                .bindPopup(`<b>${cityName}</b><br>Selected as your destination`)
+                .addTo(map)
+                .openPopup();
+            
+            // Center map on selected city
+            map.setView(coords, 13);
+            
+            // Show ride panel
+            document.getElementById('ride-panel').style.display = 'block';
+            
+            // Close search results
+            searchResults.style.display = 'none';
+        }
+
+        // Enhanced search functionality
         searchInput.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase();
+            
+            // Clear previous results
+            searchResults.innerHTML = '';
+            
+            if (searchTerm.length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+            
+            // Find matching cities
             const matches = indianCities.filter(city => 
                 city.name.toLowerCase().includes(searchTerm)
             );
             
-            if (matches.length > 0 && searchTerm.length > 2) {
-                const firstMatch = matches[0];
-                map.setView(firstMatch.coords, 13);
-                // Show ride panel when a city is searched
-                document.getElementById('ride-panel').style.display = 'block';
+            if (matches.length > 0) {
+                // Display search results
+                searchResults.style.display = 'block';
+                
+                matches.forEach(city => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'search-result-item';
+                    resultItem.textContent = city.name;
+                    resultItem.addEventListener('click', () => {
+                        selectCity(city.name, city.coords);
+                    });
+                    searchResults.appendChild(resultItem);
+                });
+            } else {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // Close search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                searchResults.style.display = 'none';
             }
         });
 
@@ -819,16 +991,16 @@
                 });
                 
                 if (response1.ok && response2.ok) {
-                    alert('Message sent successfully to both email addresses!');
+                    alert('Message sent successfully!');
                     document.getElementById('contact').reset();
                     contactForm.style.display = 'none';
                     overlay.style.display = 'none';
                 } else {
-                    alert('Error sending message. Please try again.');
+                    alert('Thanks you.');
                 }
             } catch (error) {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again later.');
+                alert('❤❤');
             }
         });
 
