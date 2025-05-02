@@ -146,7 +146,21 @@
         }
 
         .search-container {
+            position: absolute;
             top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
         }
 
         /* Service Icons */
@@ -232,7 +246,7 @@
             animation: slideUp 0.5s ease forwards;
         }
 
-        .service-icon {
+        .service-icon-large {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
@@ -310,43 +324,62 @@
             content: "Search Indian cities...";
         }
 
-        /* About Section Styles */
-        .about-section {
-            display: none;
+        /* Ride Panel Styles */
+        .ride-panel {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            z-index: 1001;
-            width: 90%;
-            max-width: 500px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #000;
+            color: white;
+            padding: 20px;
+            z-index: 999;
+            display: none;
         }
 
-        .about-section h2 {
+        .ride-options {
+            display: flex;
+            justify-content: space-around;
             margin-bottom: 20px;
+        }
+
+        .ride-option {
             text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .about-section ul {
-            list-style-type: none;
-            padding: 0;
+        .ride-option:hover {
+            background-color: #333;
         }
 
-        .about-section li {
+        .ride-option.selected {
+            background-color: #444;
+        }
+
+        .ride-option img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             margin-bottom: 10px;
         }
 
-        .about-section a {
-            color: #0077B5;
-            text-decoration: none;
+        .confirm-button {
+            background: #fff;
+            color: #000;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
         }
 
-        .about-section a:hover {
-            text-decoration: underline;
+        .confirm-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
         }
 
         /* Portfolio Section Styles */
@@ -431,15 +464,15 @@
         <h1>YAYA CAR ALL IN ONE SERVICES</h1>
         <div class="services-animation">
             <div class="service-item">
-                <div class="service-icon">🍽️</div>
+                <div class="service-icon-large">🍽️</div>
                 <h3>Food Delivery</h3>
             </div>
             <div class="service-item">
-                <div class="service-icon">🧳</div>
+                <div class="service-icon-large">🧳</div>
                 <h3>Luggage Transport</h3>
             </div>
             <div class="service-item">
-                <div class="service-icon">🚌</div>
+                <div class="service-icon-large">🚌</div>
                 <h3>Public Transport</h3>
             </div>
         </div>
@@ -448,15 +481,14 @@
     <!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">YAYACAR SERVICES </a>
+            <a href="#" class="logo">YAYACAR SERVICES</a>
             <button class="menu-toggle">☰</button>
             <div class="nav-links">
-                <a href="indexfood.html"><span>🍽️</span> Food Transport</a>
+                <a href="#"><span>🍽️</span> Food Transport</a>
                 <a href="#"><span>🚗</span> Transport</a>
-                <a href="indexluggage.html"><span>🧳</span> Luggage</a>
-                <a href="indexpublic.html"><span>🚌</span> Public Transport</a>
+                <a href="#"><span>🧳</span> Luggage</a>
+                <a href="#"><span>🚌</span> Public Transport</a>
                 <a href="#" id="contact-link"><span>📞</span> Contact Us</a>
-                
             </div>
         </div>
     </nav>
@@ -469,9 +501,7 @@
     <div class="contact-form" id="contact-form">
         <button class="close-btn">&times;</button>
         <h2>Contact Us</h2>
-        <form id="contact" action="https://api.web3forms.com/submit" method="POST">
-            <input type="hidden" name="access_key" value="0e5e0844-28e0-4920-9afb-4a99c5819d76">
-            <input type="hidden" name="access_key" value="cc5a6ac8-033a-4ce5-b3fb-d4b6a40a76a3">
+        <form id="contact">
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" id="name" name="name" required>
@@ -488,9 +518,6 @@
         </form>
     </div>
 
-    <!-- About Section -->
-    
-
     <!-- Map and Ride Content -->
     <div id="map"></div>
     
@@ -498,7 +525,7 @@
         <input type="text" class="search-input" placeholder="Search Indian cities...">
     </div>
 
-    <div class="ride-panel">
+    <div class="ride-panel" id="ride-panel">
         <div class="ride-options">
             <div class="ride-option" data-price="10">
                 <img src="https://sjc.microlink.io/eZo-NO_xjwQl3FLbMr6_dogSMtrxqE4MsXI9Mx_yax9G2OgCf2qwnksTEo6Lf-T0zhWMGwijzwEJsSdOhFKdzA.jpeg" alt="Economy">
@@ -634,6 +661,8 @@
                 .bindPopup(`<b>${city.name}</b><br>Click to select as destination`)
                 .on('click', function() {
                     document.querySelector('.search-input').value = city.name;
+                    // Show ride panel when a city is selected
+                    document.getElementById('ride-panel').style.display = 'block';
                 })
                 .addTo(map);
         });
@@ -680,6 +709,8 @@
             if (matches.length > 0 && searchTerm.length > 2) {
                 const firstMatch = matches[0];
                 map.setView(firstMatch.coords, 13);
+                // Show ride panel when a city is searched
+                document.getElementById('ride-panel').style.display = 'block';
             }
         });
 
@@ -738,7 +769,6 @@
 
         overlay.addEventListener('click', () => {
             contactForm.style.display = 'none';
-            aboutSection.style.display = 'none';
             overlay.style.display = 'none';
         });
 
@@ -747,23 +777,50 @@
             navLinks.classList.toggle('active');
         });
 
-        // Handle form submission
+        // Handle form submission to both access keys
         document.getElementById('contact').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const formData = new FormData(e.target);
-    
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Create form data for first submission
+            const formData1 = new FormData();
+            formData1.append('access_key', '0e5e0844-28e0-4920-9afb-4a99c5819d76');
+            formData1.append('name', name);
+            formData1.append('email', email);
+            formData1.append('message', message);
+            
+            // Create form data for second submission
+            const formData2 = new FormData();
+            formData2.append('access_key', 'cc5a6ac8-033a-4ce5-b3fb-d4b6a40a76a3');
+            formData2.append('name', name);
+            formData2.append('email', email);
+            formData2.append('message', message);
+            
             try {
-                const response = await fetch(e.target.action, {
+                // Send to first access key
+                const response1 = await fetch('https://api.web3forms.com/submit', {
                     method: 'POST',
-                    body: formData,
+                    body: formData1,
                     headers: {
                         'Accept': 'application/json'
                     }
                 });
-        
-                if (response.ok) {
-                    alert('Message sent successfully!');
-                    e.target.reset();
+                
+                // Send to second access key
+                const response2 = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData2,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response1.ok && response2.ok) {
+                    alert('Message sent successfully to both email addresses!');
+                    document.getElementById('contact').reset();
                     contactForm.style.display = 'none';
                     overlay.style.display = 'none';
                 } else {
@@ -793,4 +850,3 @@
     </script>
 </body>
 </html>
-
