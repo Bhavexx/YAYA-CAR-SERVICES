@@ -30,11 +30,11 @@ The site credits Bhavik Naik and Summaiya Sayyad as founders (with links to thei
 
 Design / Structure Notes:
 
-The site is relatively simple and clean, focusing on main service categories.
+The site is relatively simple and clean, focusing on the main service categories.
 
 It includes navigation links (“Food Transport”, “Luggage”, “Public Transport”, “Contact Us”).
 
-There is a “Switch Theme” option (likely for dark / light mode).
+There is a “Switch Theme” option (likely for dark/light mode).
 
 The page uses images/icons for Economy / Comfort / Premium.
 
@@ -43,4 +43,4 @@ The “Confirm Ride” button is also visible, indicating it might have a UI for
 “About Us” Section:
 The site says:
 
-“We provide premium transportation services including food delivery, personal transport, luggage handling, and public transportation solutions. Our commitment is to make your journey seamless and comfortable.”
+“We provide premium transportation services, including food delivery, personal transport, luggage handling, and public transportation solutions. Our commitment is to make your journey seamless and comfortable.”
