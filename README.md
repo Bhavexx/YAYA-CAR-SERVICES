@@ -26,7 +26,7 @@ Contact / Inquiry Section:
 There is a “Contact Us” form on the site, with fields such as Name, Email, Message, and a “Send Message” button.
 
 Founders:
-The site credits Bhavik Naik and Summaiya Sayyad as founders (with links to their LinkedIn profiles).
+The site credits Bhavik Naik as founder (with links to their LinkedIn profiles).
 
 Design / Structure Notes:
 
@@ -43,4 +43,4 @@ The “Confirm Ride” button is also visible, indicating it might have a UI for
 “About Us” Section:
 The site says:
 
-“We provide premium transportation services including food delivery, personal transport, luggage handling, and public transportation solutions. Our commitment is to make your journey seamless and comfortable.”
+“We provide premium transportation services, including food delivery, personal transport, luggage handling, and public transportation solutions. Our commitment is to make your journey seamless and comfortable.”
